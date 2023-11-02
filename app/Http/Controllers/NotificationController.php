@@ -3,21 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Models\Notification;
+use App\Services\SomeService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class NotificationController extends Controller
 {
+    private $service;
+
+    public function __construct(SomeService $someService) {
+        $this->service = $someService;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @param Notification $notification
      *
-     * @return Response
+     * @return Notification[]|\Illuminate\Database\Eloquent\Collection|Response
      */
-    public function index(Notification $notification): \Illuminate\Http\Response
+    public function index(Notification $notification)
     {
-        $notification->all();
+        return $notification->all();
     }
 
     /**
@@ -25,7 +32,7 @@ class NotificationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request, Notification $notification)
+    public function create(Request $request): Response
     {
         //
     }
@@ -36,18 +43,20 @@ class NotificationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): Response
     {
-        //
+        $response = $this->service->create($request->all());
+        return new Response($response ? 'Ok' : 'Bad request', $response ? 200 : 400);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         //
     }
@@ -55,10 +64,11 @@ class NotificationController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         //
     }
@@ -66,23 +76,27 @@ class NotificationController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param int                       $id
+     *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id): Response
     {
-        //
+        $response = $this->service->update($request->all());
+        return new Response($response ? 'Ok' : 'Bad request', $response ? 200 : 400);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id): Response
     {
-        //
+        $response = $this->service->delete($id);
+        return new Response($response ? 'Ok' : 'Bad request', $response ? 200 : 400);
     }
 }
