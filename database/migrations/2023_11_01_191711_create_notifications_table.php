@@ -15,6 +15,10 @@ class CreateNotificationsTable extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
+            $table->text('text')->nullable();
+            $table->string('integrator_type', 256)->nullable();
+            $table->enum('status', ['pending','sent','error'])->default('pending');
+            $table->date('sent_time')->nullable();
             $table->timestamps();
         });
     }

@@ -30,7 +30,9 @@ class NotificationController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     *
+     * @return Response
      */
     public function create(Request $request): Response
     {
