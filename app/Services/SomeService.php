@@ -2,6 +2,7 @@
 
     namespace App\Services;
 
+    use App\Jobs\SendNotificationJob;
     use App\Models\Notification;
 
     class SomeService
@@ -21,6 +22,7 @@
         {
             if (count($data)) {
                 $this->notifications->save($data);
+                dispatch(new SendNotificationJob($this->notifications, $data));
                 return true;
             } else {
                 return false;
